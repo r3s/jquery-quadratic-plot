@@ -70,7 +70,6 @@
                 ctx.stroke();
                 ctx.closePath();
             }
-            //Begin path for the quadratic curve
             
             //set colour to colour defined in options
             ctx.strokeStyle=this.options.colour;
@@ -78,9 +77,9 @@
             var h = ((-1*b)/(2*a));
             var k = ((a*(h*h))+(b*h)+c);
             //Store these values in to temporary variables. The original values will be reused
-            var temp_h = params.origin_x+h;
-            var temp_k = params.origin_y+k;
-                
+            var temp_h = params.origin_x+(h*10);
+            var temp_k = params.origin_y+(k*10);
+            //Begin path for the quadratic curve
             ctx.beginPath();
             //start with x=0
             var x=0;
@@ -88,7 +87,7 @@
                 //Calculate value of the function for value of x
                 var y = ((a*(x*x))+(b*x)+c);
                 y=(-1*y);
-                //Get the vertex corresponding to the canvas
+                //Get the vertex corresponding to the canvas. 1unit=10px
                 var vertex_x=params.origin_x+(x*10);
                 var vertex_y=params.origin_y+(y*10);
                 // //move to the position from which we'll draw
@@ -109,8 +108,7 @@
             }
             ctx.closePath();
             ctx.beginPath();
-                
-            //Reset temp variables to come back to the origin. We will be drawing the second side
+             //Reset temp variables to come back to the origin. We will be drawing the second side
             temp_h=params.origin_x+h;
             temp_k=params.origin_y+k;
             x=0;
