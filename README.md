@@ -23,16 +23,16 @@ Note: `a`,`b`,`c` corresponds to `a`,`b`,`c` in the equation `ax^2+bx+c`
      {
         coeff:{a:0,b:0,c:0},  //Coefficients a,b,c in ax^2+bx+c
         background:"#FFF",    //The background of the canvas element 
-        curveColour : "#0f0", //The colour to draw the parabola
+        curveColour : "#0F0", //The colour to draw the parabola
         curveWidth:2,         //The width of the line for the parabola
         drawAxis : true,      //Draw x and y axis
         axisColour:"#000",    // Colour for the x and y axis
         step:0.5,             //Value to increment the x value. smaller means smoother lines
         unitPixels:10,        //1unit = X pixels. Default is 1unit=10px
         drawGrid : true,      //draw grids of defined unitPixels
-        gridColour:"#eee",    //The colour of the grid
+        gridColour:"#EEE",    //The colour of the grid
         drawSubGrid: false,   //Divide the grid in to subgrids
-        subGridColour:"#ccc", //Colour of the subgrid lines
+        subGridColour:"#CCC", //Colour of the subgrid lines
         writeEquation:true    //Write equation on canvas
     };
 
