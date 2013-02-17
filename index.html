@@ -20,15 +20,15 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <canvas id="myCanvas" width="500" height="500"style="border:1px solid #000000;" background="#ccc" >
+        <canvas id="myCanvas" width="500" height="500" style="border:1px solid #000000;" background="#ccc" >
         </canvas>
 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="jquery-quadratic-plot.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
 
-                $("#myCanvas").quadraticPlot({a:1,b:5,c:0,colour:"#f00"});
+                $("#myCanvas").quadraticPlot({a:-2,b:-3,c:1,step:0.1,unitPixels:20,curveColour:"#f00"});
 
             });
 

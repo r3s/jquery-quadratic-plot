@@ -12,13 +12,22 @@
     
     // Create the defaults once
     var pluginName = "quadraticPlot";
+    //Default options
     var defaults = {
-        a : 0,
-        b : 0,
-        c : 0,
-        colour : "#000",
-        drawAxis : true,
-        drawGrid : true
+        a : 0, //the value of a in the equation ax^2+bx+c
+        b : 0, //the value of b in the equation ax^2+bx+c
+        c : 0, //the value of c in the equation ax^2+bx+c
+        curveColour : "#0f0", //The colour to draw the parabola
+        curveWidth:2, //The width of the line for the parabola
+        drawAxis : true, //Draw x and y axis
+        axisColour:"#000", // Colour for the x and y axis
+        step:0.5, //Value to increment the x value. smaller means smoother lines
+        unitPixels:10, //1unit = X pixels. Default is 1unit=10px
+        drawGrid : true, //draw grids of defined unitPixels
+        gridColour:"#eee", //The colour of the grid
+        drawSubGrid: false, //Divide the grid in to subgrids
+        subGridColour:"#ccc", //Colour of the subgrid lines
+        writeEquation:true //Write equation on canvas
     };
 
     // The actual plugin constructor
@@ -38,102 +47,129 @@
             var height = this.element.height;
             var width = this.element.width;
             
-            //Set the origin as center of the canvas
-            var o_x = width/2;
-            var o_y = height/2;
-            //m_s is max_side, which is the maximum limit for the curve.
-            var m_s = width/2;
+            //m_x is the maximum limit for x of the curve. 
+            var m_x = width/2;
+            var m_y = height/2;
             //use an object params to store the above values required for plotting
-            var params = {origin_x:o_x,origin_y:o_y,max_side:m_s};
+            var params = {width:width,height:height,max_x:m_x,max_y:m_y};
             //call the function qPlot which plots
-            this.qPlot(this.element,this.options,params);
+            this.qPlot(params);
         },
-        qPlot: function (element, options, params) {
+        setOptions: function(params,ctx){
+            if(this.options.drawGrid==true){
+                //Draw the grids if the option  is set
+                this.drawGrids(this.options.unitPixels,this.options.drawSubGrid,params,ctx,
+                                this.options.gridColour,this.options.subGridColour);
+            }
+             //Draw axis if the option is set
+            if(this.options.drawAxis==true){
+                //Set axis color and draw the x and y axis
+                ctx.strokeStyle=this.options.axisColour;
+                this.drawLine((-1*params.max_x),0,params.max_x,0,ctx);
+                this.drawLine(0,(-1*params.max_y),0,params.max_y,ctx);
+            }
+            if(this.options.writeEquation==true){
+                /*TODO: Write Equation*/
+            }
+            
+        },
+        /* The following fuction uses a canvas context to draw a line
+            from (start_x,start_y) to (end_x,end_y)
+        */
+        drawLine: function(start_x,start_y,end_x,end_y,ctx){
+            ctx.beginPath();
+            ctx.moveTo(start_x,start_y);
+            ctx.lineTo(end_x,end_y);
+            ctx.stroke();
+            ctx.closePath();
+        },
+         /* The following fuction uses a canvas context to draw grids
+            starting from the left most point (0,0). It first draws 
+            vertical stripes and then horizontal stripes. The argument
+            unit is used as the increment. Argument subunit should be 
+            used for dividing the main unit in to smaller parts. The
+            colours are also passed in as argument.
+        */
+        drawGrids: function(unit,subgrid,params,ctx,main_grid_colour,sub_grid_colour){
+            ctx.strokeStyle=main_grid_colour;
+            ctx.moveTo(0,0);
+            var main_unit=0;
+            // Draw vertical lines
+            while(main_unit<params.width){
+                main_unit+=unit;
+                //Vertical lines right of y-axis
+                this.drawLine(main_unit,(-1*params.height),main_unit,params.height,ctx);
+                //Vertical lines left of y-axis
+                this.drawLine((-1*main_unit),(-1*params.height),(-1*main_unit),params.height,ctx);
+            }
+            //Draw horizontal lines
+            ctx.moveTo(0,0);
+            main_unit=0;
+            while(main_unit<params.height){
+                main_unit+=unit;
+                //Horizontal lines above x-axis
+                this.drawLine((-1*params.max_x),main_unit,params.max_x,main_unit,ctx);
+                //Horizontal lines below y-axis
+                this.drawLine((-1*params.max_x),(-1*main_unit),params.max_x,(-1*main_unit),ctx);
+            }
+
+
+        },
+        qPlot: function (params) {
             //Get 2d context from the canvas element. This will be used for drawing
-            var ctx = element.getContext("2d");
+            var ctx = this.element.getContext("2d");
+            ctx.translate(params.max_x,params.max_y);
             //Store the values of options in to local variables
             var a=this.options.a;
             var b=this.options.b;
             var c=this.options.c;
 
-            //Draw axis if the option is set
-            if(this.options.drawAxis==true){
-                //Begin path for the axis
-                ctx.beginPath();
-                //Draw x axis
-                ctx.moveTo(0,params.origin_y);
-                ctx.lineTo((params.origin_x*2),params.origin_y);
-                ctx.stroke();
-                //Draw y axis
-                ctx.moveTo(params.origin_x,0);
-                ctx.lineTo(params.origin_x,(params.origin_y*2));
-                ctx.stroke();
-                ctx.closePath();
-            }
+            this.setOptions(params,ctx);
+
+          
             
-            //set colour to colour defined in options
-            ctx.strokeStyle=this.options.colour;
-            //Calculate h and k. h and k decides the origin of the curve! Mathematics baby
+            //Calculate h and k. h and k decides the focus/origin of the curve!
             var h = ((-1*b)/(2*a));
-            var k = ((a*(h*h))+(b*h)+c);
-            //Store these values in to temporary variables. The original values will be reused
-            var temp_h = params.origin_x+(h*10);
-            var temp_k = params.origin_y+(k*10);
-            //Begin path for the quadratic curve
-            ctx.beginPath();
-            //start with x=0
-            var x=0;
-            while(true){
+            var k = (-1)*((a*(h*h))+(b*h)+c);
+        
+
+            //set colour n width defined in options
+            ctx.strokeStyle=this.options.curveColour;
+            ctx.lineWidth=this.options.curveWidth;
+            //start with x=h, that is the focus of the curve
+            var x=h;
+            var y=0;
+            
+            var temp_h=h*this.options.unitPixels;
+            var temp_k=k*this.options.unitPixels;
+            var prev_x1=temp_h,prev_y1=temp_k,prev_x2=temp_h;
+            var new_x=0,new_y=0;
+            var negx=0;
+            while(Math.abs(prev_y1)<params.max_y){
+
                 //Calculate value of the function for value of x
-                var y = ((a*(x*x))+(b*x)+c);
-                y=(-1*y);
-                //Get the vertex corresponding to the canvas. 1unit=10px
-                var vertex_x=params.origin_x+(x*10);
-                var vertex_y=params.origin_y+(y*10);
-                // //move to the position from which we'll draw
-                ctx.moveTo(temp_h,temp_k);
-                //draw the line to new (x,y) 
-                ctx.lineTo(vertex_x,vertex_y);
-                //ctx.arc(vertex_x,vertex_y,3,0,2*Math.PI);
-                ctx.stroke();
-                //change the next starting point to current (x,y)
-                console.log(vertex_x,vertex_y);
-                temp_h=vertex_x;
-                temp_k=vertex_y;
-                //increment 0.1. For smoother curves
-                x+=0.1;
-                //if our max limit is reached, break
-                if(x>params.max_side || x>1000 )
-                    break;
-            }
-            ctx.closePath();
-            ctx.beginPath();
-             //Reset temp variables to come back to the origin. We will be drawing the second side
-            temp_h=params.origin_x+h;
-            temp_k=params.origin_y+k;
-            x=0;
-            while(true){
-                var y = ((a*(x*x))+(b*x)+c);
-                y=(-1*y);
-                var vertex_x=params.origin_x+(x*10);
-                var vertex_y=params.origin_y+(y*10);
-                
-                ctx.moveTo(temp_h,temp_k);
-                ctx.lineTo(vertex_x,vertex_y);
-                ctx.stroke();
-                
-                temp_h=vertex_x;
-                temp_k=vertex_y;
-               
-                //only change is here. Instead on incrementing x, we decrease it
-                x-=0.1;
-                if((-1*x)>params.max_side || (-1*x)>1000)
-                   { console.log('breaking with x= '+x);break;}
+                y = (-1)*((a*(x*x))+(b*x)+c);
+                //Convert the values in to pixels and multiply with unit for scaling
+                new_x=x*this.options.unitPixels;
+                new_y=y*this.options.unitPixels;
+                //Calculate the symmetric value for x for the current point
+                negx =new_x+2*(temp_h-new_x);
+                //Draw the 2 lines
+                this.drawLine(prev_x1,prev_y1,new_x,new_y,ctx);
+                this.drawLine(prev_x2,prev_y1,negx,new_y,ctx);
+                //Store current values for use in next iteration
+                prev_x1=new_x;
+                prev_y1=new_y;
+                prev_x2=negx;
+                 //increment x with the defined step value in options. 
+                 //the smaller the value, the finer the curve.
+                x+=this.options.step;
+
             }
 
-            ctx.closePath();
+
+
                 
-            
         }
     };
 
