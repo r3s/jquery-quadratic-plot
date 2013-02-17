@@ -54,6 +54,8 @@
             //Get 2d context from the canvas element. And move origin to centre
             var ctx = this.element.getContext("2d");
             ctx.translate(params.max_x,params.max_y);
+            //Set the options
+            this.setOptions(params,ctx);
             //call the function qPlot which plots
             this.qSinglePlot(ctx,params);
         },
@@ -125,10 +127,6 @@
             var a=this.options.coeff.a;
             var b=this.options.coeff.b;
             var c=this.options.coeff.c;
-
-            this.setOptions(params,ctx);
-
-          
             
             //Calculate h and k. h and k decides the focus/origin of the curve!
             var h = ((-1*b)/(2*a));
@@ -141,9 +139,10 @@
             //start with x=h, that is the focus of the curve
             var x=h;
             var y=0;
-            
+            //temp_h and temp_k are h and k values scaled
             var temp_h=h*this.options.unitPixels;
             var temp_k=k*this.options.unitPixels;
+            //prev_x1,prev_y1,prev_x2 serves as previous points where the line ended.
             var prev_x1=temp_h,prev_y1=temp_k,prev_x2=temp_h;
             var new_x=0,new_y=0;
             var negx=0;
