@@ -16,16 +16,16 @@
     var defaults = {
         coeff:{a:0,b:0,c:0},  //Coefficients a,b,c in ax^2+bx+c
         background:"#FFF",    //The background of the canvas element 
-        curveColour : "#0f0", //The colour to draw the parabola
+        curveColour : "#0F0", //The colour to draw the parabola
         curveWidth:2,         //The width of the line for the parabola
         drawAxis : true,      //Draw x and y axis
         axisColour:"#000",    //Colour for the x and y axis
         step:0.5,             //Value to increment the x value. smaller means smoother lines
         unitPixels:10,        //1unit = X pixels. Default is 1unit=10px
         drawGrid : true,      //Draw grids of defined unitPixels
-        gridColour:"#eee",    //The colour of the grid
+        gridColour:"#EEE",    //The colour of the grid
         drawSubGrid: false,   //Divide the grid in to subgrids
-        subGridColour:"#ccc", //Colour of the subgrid lines
+        subGridColour:"#CCC", //Colour of the subgrid lines
         writeEquation:true //Write equation on canvas
     };
 
@@ -41,7 +41,6 @@
 
     Plugin.prototype = {
         init: function () {
-            
             //Get the parameters of the canvas
             var height = this.element.height;
             var width = this.element.width;
@@ -155,9 +154,11 @@
                 new_y=y*this.options.unitPixels;
                 //Calculate the symmetric value for x for the current point
                 negx =new_x+2*(temp_h-new_x);
+
                 //Draw the 2 lines
                 this.drawLine(prev_x1,prev_y1,new_x,new_y,ctx);
                 this.drawLine(prev_x2,prev_y1,negx,new_y,ctx);
+                
                 //Store current values for use in next iteration
                 prev_x1=new_x;
                 prev_y1=new_y;
