@@ -1,22 +1,24 @@
-jQuery-Quadratic-Plot
+##jQuery-Quadratic-Plot
 =====================
 
 A jQuery plugin that can plot quadratic equation on an HTML5 canvas element
 
-Usage:
+###Usage:
 ------
-1. Define a canvas element in the HTML file. '<canvas id="myCanvas" width="500" height="500"></canvas'
-2. Include the jquery-quadratic-plot.js '<script  type="text/javascript" src="js/jquery-quadratic-plot.js">'
-3. Call the plugin on your canvas element. '$("#myCanvas").quadraticPlot({a:-2,b:-3,c:1});'
+1. Define a canvas element in the HTML file.
+         `<canvas id="myCanvas" width="500" height="500"></canvas>`
+2. Include the jquery-quadratic-plot.js 
+        ` <script  type="text/javascript" src="js/jquery-quadratic-plot.js">`
+3. Call the plugin on your canvas element. 
+        ` $("#myCanvas").quadraticPlot({a:-2,b:-3,c:1});`
 
-Note: a,b,c corresponds to a,b,c in the equation ax^2+bx+c
+Note: `a`,`b`,`c` corresponds to `a`,`b`,`c` in the equation `ax^2+bx+c`
 
 
-Options:
+###Options:
 --------
 
-'
-{
+     {
         a : 0,                //the value of a in the equation ax^2+bx+c
         b : 0,                //the value of b in the equation ax^2+bx+c
         c : 0,                //the value of c in the equation ax^2+bx+c
@@ -33,6 +35,6 @@ Options:
         writeEquation:true    //Write equation on canvas
     };
 
-'
 
-Note: The options drawSubGrid, subGridColour and writeEquation are not supported yet.
+
+Note: The options `drawSubGrid`, `subGridColour` and `writeEquation` are not supported yet.
