@@ -14,18 +14,17 @@
     var pluginName = "quadraticPlot";
     //Default options
     var defaults = {
-        a : 0, //the value of a in the equation ax^2+bx+c
-        b : 0, //the value of b in the equation ax^2+bx+c
-        c : 0, //the value of c in the equation ax^2+bx+c
+        coeff:{a:0,b:0,c:0},  //Coefficients a,b,c in ax^2+bx+c
+        background:"#FFF",    //The background of the canvas element 
         curveColour : "#0f0", //The colour to draw the parabola
-        curveWidth:2, //The width of the line for the parabola
-        drawAxis : true, //Draw x and y axis
-        axisColour:"#000", // Colour for the x and y axis
-        step:0.5, //Value to increment the x value. smaller means smoother lines
-        unitPixels:10, //1unit = X pixels. Default is 1unit=10px
-        drawGrid : true, //draw grids of defined unitPixels
-        gridColour:"#eee", //The colour of the grid
-        drawSubGrid: false, //Divide the grid in to subgrids
+        curveWidth:2,         //The width of the line for the parabola
+        drawAxis : true,      //Draw x and y axis
+        axisColour:"#000",    //Colour for the x and y axis
+        step:0.5,             //Value to increment the x value. smaller means smoother lines
+        unitPixels:10,        //1unit = X pixels. Default is 1unit=10px
+        drawGrid : true,      //Draw grids of defined unitPixels
+        gridColour:"#eee",    //The colour of the grid
+        drawSubGrid: false,   //Divide the grid in to subgrids
         subGridColour:"#ccc", //Colour of the subgrid lines
         writeEquation:true //Write equation on canvas
     };
@@ -52,10 +51,15 @@
             var m_y = height/2;
             //use an object params to store the above values required for plotting
             var params = {width:width,height:height,max_x:m_x,max_y:m_y};
+            //Get 2d context from the canvas element. And move origin to centre
+            var ctx = this.element.getContext("2d");
+            ctx.translate(params.max_x,params.max_y);
             //call the function qPlot which plots
-            this.qPlot(params);
+            this.qSinglePlot(ctx,params);
         },
         setOptions: function(params,ctx){
+            ctx.fillStyle=this.options.background;
+            ctx.fillRect((-1*params.max_x),(-1*params.max_y),params.width,params.height);
             if(this.options.drawGrid==true){
                 //Draw the grids if the option  is set
                 this.drawGrids(this.options.unitPixels,this.options.drawSubGrid,params,ctx,
@@ -115,14 +119,12 @@
 
 
         },
-        qPlot: function (params) {
-            //Get 2d context from the canvas element. This will be used for drawing
-            var ctx = this.element.getContext("2d");
-            ctx.translate(params.max_x,params.max_y);
+        qSinglePlot: function (ctx,params) {
+            
             //Store the values of options in to local variables
-            var a=this.options.a;
-            var b=this.options.b;
-            var c=this.options.c;
+            var a=this.options.coeff.a;
+            var b=this.options.coeff.b;
+            var c=this.options.coeff.c;
 
             this.setOptions(params,ctx);
 

@@ -10,7 +10,9 @@ A jQuery plugin that can plot quadratic equation on an HTML5 canvas element
 2. Include the jquery-quadratic-plot.js 
         ` <script  type="text/javascript" src="js/jquery-quadratic-plot.js">`
 3. Call the plugin on your canvas element. 
-        ` $("#myCanvas").quadraticPlot({a:-2,b:-3,c:1});`
+        ` $("#myCanvas").quadraticPlot({
+                                        coeff:{a:2,b:1,c:1}
+                                    });`
 
 Note: `a`,`b`,`c` corresponds to `a`,`b`,`c` in the equation `ax^2+bx+c`
 
@@ -19,9 +21,8 @@ Note: `a`,`b`,`c` corresponds to `a`,`b`,`c` in the equation `ax^2+bx+c`
 --------
 
      {
-        a : 0,                //the value of a in the equation ax^2+bx+c
-        b : 0,                //the value of b in the equation ax^2+bx+c
-        c : 0,                //the value of c in the equation ax^2+bx+c
+        coeff:{a:0,b:0,c:0},  //Coefficients a,b,c in ax^2+bx+c
+        background:"#FFF",    //The background of the canvas element 
         curveColour : "#0f0", //The colour to draw the parabola
         curveWidth:2,         //The width of the line for the parabola
         drawAxis : true,      //Draw x and y axis
