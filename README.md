@@ -34,6 +34,8 @@ Note: `a`,`b`,`c` corresponds to `a`,`b`,`c` in the equation `ax^2+bx+c`
         drawSubGrid: false,   //Divide the grid in to subgrids
         subGridColour:"#CCC", //Colour of the subgrid lines
         writeEquation:true    //Write equation on canvas
+        scaleX: 1             //Scale X values by this factor
+        scaleY: 1             //Scale Y values by this factor
     };
 
 

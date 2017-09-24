@@ -23,10 +23,12 @@
         step:0.5,             //Value to increment the x value. smaller means smoother lines
         unitPixels:10,        //1unit = X pixels. Default is 1unit=10px
         drawGrid : true,      //Draw grids of defined unitPixels
-        gridColour:"#EEE",    //The colour of the grid
+        gridColour:"#eee",    //The colour of the grid
         drawSubGrid: false,   //Divide the grid in to subgrids
-        subGridColour:"#CCC", //Colour of the subgrid lines
-        writeEquation:true //Write equation on canvas
+        subGridColour:"#CCC",   //Colour of the subgrid lines
+        writeEquation:false,    //Write equation on canvas,
+        scaleX: 1,              //Scale large X values by this factor
+        scaleY: 1,             //Scale large Y values by this factor
     };
 
     // The actual plugin constructor
@@ -139,8 +141,8 @@
             var x=h;
             var y=0;
             //temp_h and temp_k are h and k values scaled
-            var temp_h=h*this.options.unitPixels;
-            var temp_k=k*this.options.unitPixels;
+            var temp_h=(h*this.options.unitPixels)/this.options.scaleX;
+            var temp_k=(k*this.options.unitPixels)/this.options.scaleY;
             //prev_x1,prev_y1,prev_x2 serves as previous points where the line ended.
             var prev_x1=temp_h,prev_y1=temp_k,prev_x2=temp_h;
             var new_x=0,new_y=0;
@@ -150,8 +152,8 @@
                 //Calculate value of the function for value of x
                 y = (-1)*((a*(x*x))+(b*x)+c);
                 //Convert the values in to pixels and multiply with unit for scaling
-                new_x=x*this.options.unitPixels;
-                new_y=y*this.options.unitPixels;
+                new_x=(x*this.options.unitPixels)/this.options.scaleX;
+                new_y=(y*this.options.unitPixels)/this.options.scaleY;
                 //Calculate the symmetric value for x for the current point
                 negx =new_x+2*(temp_h-new_x);
 
